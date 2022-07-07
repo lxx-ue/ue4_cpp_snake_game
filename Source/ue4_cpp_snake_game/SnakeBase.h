@@ -47,6 +47,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	void AddSnakeElemet(int ElementsNum = 1);
+	void AddSnakeElement(int ElementsNum = 1);
 	void Move();
+	void SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other);
 };

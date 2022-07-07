@@ -3,6 +3,7 @@
 
 #include "SnakeBase.h"
 #include "SnakeElementBase.h"
+#include "Interactable.h"
 
 // Sets default values
 ASnakeBase::ASnakeBase()
@@ -19,7 +20,7 @@ void ASnakeBase::BeginPlay()
 {
 	Super::BeginPlay();
 	SetActorTickInterval(MovementSpeed);
-	AddSnakeElemet(5);
+	AddSnakeElement(5);
 }
 
 // Called every frame
@@ -29,13 +30,14 @@ void ASnakeBase::Tick(float DeltaTime)
 	Move();
 }
 
-void ASnakeBase::AddSnakeElemet(int ElementsNum)
+void ASnakeBase::AddSnakeElement(int ElementsNum)
 {
 	for (int i = 0; i < ElementsNum; i++)
 	{
 		FVector NewLocation(SnakeElements.Num() * ElementSize, 0, 0);
 		FTransform NewTransform = FTransform(NewLocation);
 		ASnakeElementBase* NewSnakeElem = GetWorld()->SpawnActor<ASnakeElementBase>(SnakeElementClass, NewTransform);
+		NewSnakeElem->SnakeOwner = this;
 		int32 ElementIndex = SnakeElements.Add(NewSnakeElem);
 		if (ElementIndex == 0)
 			NewSnakeElem->SetFirstElementType();
@@ -45,27 +47,28 @@ void ASnakeBase::AddSnakeElemet(int ElementsNum)
 void ASnakeBase::Move()
 {
 	FVector MovementVector(ForceInitToZero);
-	float SpeedMovement = ElementSize;
 	if (LastMoveDirection == EMovementDirection::UP)
 	{
-		MovementVector - FVector(SpeedMovement, 0, 0);
+		MovementVector - FVector(ElementSize, 0, 0);
 	}
 	switch (LastMoveDirection)
 	{
 	case EMovementDirection::UP : 
-		MovementVector.X += SpeedMovement;
+		MovementVector.X += ElementSize;
 		break;
 	case EMovementDirection::DOWN:
-		MovementVector.X -= SpeedMovement;
+		MovementVector.X -= ElementSize;
 		break;
 	case EMovementDirection::LEFT:
-		MovementVector.Y += SpeedMovement;
+		MovementVector.Y += ElementSize;
 		break;
 	case EMovementDirection::RIGHT :
-		MovementVector.Y -= SpeedMovement;
+		MovementVector.Y -= ElementSize;
 		break;
 	}
 	//AddActorWorldOffset(MovementVector);
+	SnakeElements[0]->ToggleCollision();
+
 	for (int i = SnakeElements.Num() - 1; i > 0; --i)
 	{
 		auto CurrentElement = SnakeElements[i];
@@ -74,4 +77,20 @@ void ASnakeBase::Move()
 		CurrentElement->SetActorLocation(PrevLocation);
 	}
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
+	SnakeElements[0]->ToggleCollision();
+}
+
+void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActor* Other)
+{
+	if (IsValid(OverlappedElement))
+	{
+		int32 ElemIndex;
+		SnakeElements.Find(OverlappedElement, ElemIndex);
+		bool bIsFirst = ElemIndex == 0;
+		IInteractable* InteractableInterface = Cast<IInteractable>(Other);
+		if (InteractableInterface)
+		{
+			InteractableInterface->Interact(this, bIsFirst);
+		}
+	}
 }
