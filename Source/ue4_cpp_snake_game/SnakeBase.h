@@ -33,7 +33,7 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 		float ElementSize;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		float MovementSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

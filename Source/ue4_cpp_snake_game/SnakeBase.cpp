@@ -13,7 +13,7 @@ ASnakeBase::ASnakeBase()
 	PrimaryActorTick.bCanEverTick = true;
 	ElementSize = 100.0f;
 	LastMoveDirection = EMovementDirection::LEFT;
-	MovementSpeed = 10.0f;
+	MovementSpeed = 0.5f;
 }
 
 // Called when the game starts or when spawned
@@ -45,7 +45,8 @@ void ASnakeBase::AddSnakeElement(int ElementsNum)
 			NewSnakeElem->SetFirstElementType();
 		else 
 			NewSnakeElem->MeshComponent->SetVisibility(false);
-		MovementSpeed -= 0.05;
+		MovementSpeed = FMath::Clamp(MovementSpeed - 0.01, 0.1, 0.5);
+		SetActorTickInterval(MovementSpeed);
 	}
 }
 
@@ -103,8 +104,8 @@ void ASnakeBase::SnakeElementOverlap(ASnakeElementBase* OverlappedElement, AActo
 
 void ASnakeBase::KillSnake()
 {
-	/*for (auto elem : SnakeElements)
-		elem->Destroy();*/
+	for (auto elem : SnakeElements)
+		elem->Destroy();
 	Destroy();
 }
 
