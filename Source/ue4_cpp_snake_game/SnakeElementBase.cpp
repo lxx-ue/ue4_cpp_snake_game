@@ -38,7 +38,7 @@ void ASnakeElementBase::Interact(AActor* Interact, bool bIsHead)
 	auto Snake = Cast<ASnakeBase>(Interact);
 	if (IsValid(Snake))
 	{
-		Snake->Destroy();
+		Snake->KillSnake();
 	}
 }
 

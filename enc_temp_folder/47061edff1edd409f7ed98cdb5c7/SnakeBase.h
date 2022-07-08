@@ -36,7 +36,7 @@ public:
 		float MovementSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-		int32 Points = -18;
+		int32 Points = 0;
 
 	UPROPERTY(EditDefaultsOnly)
 		int32 DefaultPoints = 6;
