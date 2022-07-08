@@ -43,9 +43,6 @@ void ASnakeBase::AddSnakeElement(int ElementsNum)
 		Points += DefaultPoints;
 		if (ElementIndex == 0)
 			NewSnakeElem->SetFirstElementType();
-		else 
-			NewSnakeElem->MeshComponent->SetVisibility(false);
-		MovementSpeed -= 0.05;
 	}
 }
 
@@ -80,7 +77,6 @@ void ASnakeBase::Move()
 		auto PrevElement = SnakeElements[i - 1];
 		FVector PrevLocation = PrevElement->GetActorLocation();
 		CurrentElement->SetActorLocation(PrevLocation);
-		CurrentElement->MeshComponent->SetVisibility(true);
 	}
 	SnakeElements[0]->AddActorWorldOffset(MovementVector);
 	SnakeElements[0]->ToggleCollision();
