@@ -8,6 +8,7 @@
 
 class UCameraComponent;
 class ASnakeBase;
+class ASpawner;
 
 UCLASS()
 class UE4_CPP_SNAKE_GAME_API APlayerPawnBase : public APawn
@@ -24,8 +25,14 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 		ASnakeBase* SnakeActor;
 
+	UPROPERTY(BlueprintReadWrite)
+		ASpawner* SpawnerActor;
+
 	UPROPERTY(EditDefaultsOnly)
 		TSubclassOf<ASnakeBase> SnakeActorClass;
+
+	UPROPERTY(EditDefaultsOnly)
+		TSubclassOf<ASpawner> SpawnerActorClass;
 
 protected:
 	// Called when the game starts or when spawned

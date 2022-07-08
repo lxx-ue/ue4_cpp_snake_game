@@ -4,6 +4,7 @@
 #include "SnakeBase.h"
 #include "SnakeElementBase.h"
 #include "Interactable.h"
+#include "Spawner.h"
 
 // Sets default values
 ASnakeBase::ASnakeBase()
@@ -101,4 +102,9 @@ void ASnakeBase::KillSnake()
 	/*for (auto elem : SnakeElements)
 		elem->Destroy();*/
 	Destroy();
+}
+
+void ASnakeBase::SpawnNewFood()
+{
+	SpawnerActor->SpawnFood();
 }
