@@ -52,5 +52,5 @@ public:
 	UFUNCTION()
 		void HandlePlayerHorizontalInput(float value);
 
-	void Restart();
+	void Restart();	
 };
